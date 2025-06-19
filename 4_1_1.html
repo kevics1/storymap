@@ -9,26 +9,34 @@
         body {
             margin: 0;
             padding: 20px;
-            background-color: #f5f7fa;
+            background-color: rgb(250, 242, 230); /* 修改为要求的背景色 */
             font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         #container {
+            width: 95%;
             max-width: 1000px;
-            margin: 0 auto;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
             padding: 25px;
+            border: 1px solid #e8dcc0; /* 添加与背景协调的边框 */
         }
         h1 {
             text-align: center;
             color: #1a3a6d;
             margin-bottom: 10px;
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0e6d6;
         }
         .subtitle {
             text-align: center;
-            color: #4a6fa5;
+            color: #6c7a89;
             margin-bottom: 25px;
             font-size: 15px;
         }
@@ -37,16 +45,17 @@
             width: 100%;
         }
         .source {
-            text-align: right;
+            text-align: center;
             font-size: 13px;
-            color: #6c7a89;
-            margin-top: 15px;
-            font-style: italic;
+            color: #8a7e6d;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #f0e6d6;
         }
         .legend {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             margin: 15px 0;
             flex-wrap: wrap;
         }
@@ -54,12 +63,42 @@
             display: flex;
             align-items: center;
             font-size: 14px;
+            background: #f9f5ee;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #e8dcc0;
         }
         .legend-color {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 4px;
             margin-right: 8px;
+        }
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .stat-card {
+            background: #f9f5ee;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            border: 1px solid #e8dcc0;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a3a6d;
+            margin: 8px 0;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: #6c7a89;
         }
     </style>
 </head>
@@ -67,6 +106,25 @@
     <div id="container">
         <h1>东盟外国直接投资(FDI)流入分析 (2013-2023)</h1>
         <div class="subtitle">单位：亿美元 | 数据来源: 东盟2024年统计摘要</div>
+        
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value">2298亿</div>
+                <div class="stat-label">2023年FDI总额</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">+0.3%</div>
+                <div class="stat-label">同比增长</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">219亿</div>
+                <div class="stat-label">中国制造业FDI</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">90.7%</div>
+                <div class="stat-label">十年增长</div>
+            </div>
+        </div>
         
         <div class="legend">
             <div class="legend-item">
@@ -89,7 +147,7 @@
         
         <div id="chart"></div>
         
-        <div class="source">制图: 南华早报 | 2023年东盟FDI总额: 2298亿美元（同比增长0.3%）</div>
+        <div class="source"></div>
     </div>
 
     <script>
@@ -108,14 +166,24 @@
         const option = {
             tooltip: {
                 trigger: 'axis',
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                borderColor: '#d1c0a5',
+                borderWidth: 1,
+                padding: [10, 15],
+                textStyle: {
+                    color: '#5a4e3c'
+                },
                 formatter: function(params) {
-                    let result = `<div style="font-weight:bold;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #eee">${params[0].name}年</div>`;
+                    let result = `<div style="font-weight:bold;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #eee;color:#1a3a6d">${params[0].name}年</div>`;
                     
                     params.forEach(param => {
                         if (param.value !== null) {
                             result += `
-                                <div style="display:flex;justify-content:space-between;margin-top:5px">
-                                    <span>${param.seriesName}:</span>
+                                <div style="display:flex;justify-content:space-between;margin-top:8px;align-items:center">
+                                    <div style="display:flex;align-items:center">
+                                        <div style="width:10px;height:10px;border-radius:50%;background:${param.color};margin-right:8px"></div>
+                                        <span>${param.seriesName}</span>
+                                    </div>
                                     <span style="font-weight:bold;color:${param.color}">${param.value.toFixed(1)}亿美元</span>
                                 </div>`;
                         }
@@ -128,7 +196,7 @@
                 left: '3%',
                 right: '4%',
                 bottom: '10%',
-                top: '10%',
+                top: '12%',
                 containLabel: true
             },
             xAxis: {
@@ -138,11 +206,17 @@
                     lineStyle: {
                         color: '#9cb3c9'
                     }
+                },
+                axisLabel: {
+                    fontWeight: 'bold'
                 }
             },
             yAxis: {
                 type: 'value',
                 name: '亿美元',
+                nameTextStyle: {
+                    color: '#5a4e3c'
+                },
                 axisLine: {
                     show: true,
                     lineStyle: {
@@ -154,6 +228,9 @@
                         type: 'dashed',
                         color: '#e6eef7'
                     }
+                },
+                axisLabel: {
+                    color: '#5a4e3c'
                 }
             },
             series: [
@@ -163,13 +240,22 @@
                     data: totalFDI,
                     smooth: true,
                     symbol: 'circle',
-                    symbolSize: 8,
+                    symbolSize: 10,
                     lineStyle: {
                         width: 4,
                         color: '#1a3a6d'
                     },
                     itemStyle: {
                         color: '#1a3a6d'
+                    },
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '峰值', symbolSize: 60 }
+                        ],
+                        label: {
+                            color: '#fff',
+                            backgroundColor: '#1a3a6d'
+                        }
                     }
                 },
                 {
@@ -198,13 +284,22 @@
                     data: chinaManufacturingFDI,
                     smooth: true,
                     symbol: 'diamond',
-                    symbolSize: 10,
+                    symbolSize: 12,
                     lineStyle: {
                         width: 3,
                         color: '#d9534f'
                     },
                     itemStyle: {
                         color: '#d9534f'
+                    },
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '峰值', value: 33.5, xAxis: '2022', yAxis: 33.5 }
+                        ],
+                        label: {
+                            color: '#fff',
+                            backgroundColor: '#d9534f'
+                        }
                     }
                 }
             ]
