@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>东盟外国直接投资(FDI)流入分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #d1e0f0;
+        }
+        h1 {
+            color: #1a3a6d;
+            margin-bottom: 10px;
+            font-size: 2.4rem;
+        }
+        .subtitle {
+            color: #4a6fa5;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .stats-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 100, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .chart-container {
+            height: 600px;
+            width: 100%;
+        }
+        .data-highlights {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            gap: 20px;
+        }
+        .data-card {
+            background: linear-gradient(135deg, #1a3a6d 0%, #4a6fa5 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .data-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .data-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .data-change {
+            font-size: 1rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .source {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #6c7a89;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        .tooltip {
+            font-size: 14px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #d1e0f0;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .tooltip-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a3a6d;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 6px;
+        }
+        .tooltip-item {
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            min-width: 200px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>东盟国家外国直接投资(FDI)流入分析 (2013-2023)</h1>
+            <p class="subtitle">数据显示，东盟已成为中国制造业外国直接投资的最大目的地。2023年东盟国家吸引外国直接投资2298亿美元，同比增长0.3%。</p>
+        </header>
+        
+        <div class="data-highlights">
+            <div class="data-card">
+                <h3>2023年FDI总额</h3>
+                <div class="data-value">2298亿</div>
+                <div class="data-unit">美元</div>
+            </div>
+            <div class="data-card">
+                <h3>同比增长</h3>
+                <div class="data-value">+0.3%</div>
+                <div class="data-unit">较2022年</div>
+            </div>
+            <div class="data-card">
+                <h3>十年增长</h3>
+                <div class="data-value">+90.7%</div>
+                <div class="data-unit">较2013年</div>
+            </div>
+            <div class="data-card">
+                <h3>中国制造业FDI</h3>
+                <div class="data-value">219亿</div>
+                <div class="data-unit">2023年</div>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #1a3a6d;"></div>
+                    <span>FDI总额</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4a9d9c;"></div>
+                    <span>东盟外投资</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #e8c547;"></div>
+                    <span>东盟内投资</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #d9534f;"></div>
+                    <span>中国制造业FDI</span>
+                </div>
+            </div>
+            
+            <div id="chart" class="chart-container"></div>
+            
+            <div class="source">
+                数据来源: 东盟2024年统计摘要 | 制图: 南华早报
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化ECharts实例
+        const chartDom = document.getElementById('chart');
+        const myChart = echarts.init(chartDom);
+        
+        // 图表数据
+        const years = ['2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
+        const totalFDI = [120.5, 129.9, 115.4, 112.5, 156.4, 145.1, 164.4, 120.4, 207.7, 229.2, 229.8];
+        const extraASEAN = [130.5, 123.5, 143.2, 97.9, 105.7, 208.0, null, null, null, null, null];
+        const intraASEAN = [102.1, 108.0, 95.1, 86.8, null, null, null, null, null, null, null];
+        const chinaManufacturingFDI = [18.4, 21.9, 20.3, 25.7, 25.9, 21.6, 21.2, 22.4, 24.4, 33.5, 21.9];
+        
+        // 配置项
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                borderColor: '#d1e0f0',
+                borderWidth: 1,
+                padding: [10, 15],
+                textStyle: {
+                    color: '#333'
+                },
+                formatter: function(params) {
+                    let result = `<div class="tooltip">
+                        <div class="tooltip-title">${params[0].name}年</div>`;
+                    
+                    params.forEach(param => {
+                        if (param.value) {
+                            const value = param.value.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1});
+                            result += `
+                                <div class="tooltip-item">
+                                    <span>${param.seriesName}:</span>
+                                    <span style="font-weight:bold; color:${param.color}">${value}亿美元</span>
+                                </div>`;
+                        }
+                    });
+                    
+                    result += '</div>';
+                    return result;
+                }
+            },
+            legend: {
+                data: ['FDI总额', '东盟外投资', '东盟内投资', '中国制造业FDI'],
+                bottom: 10,
+                textStyle: {
+                    fontSize: 13
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                top: '10%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: years,
+                axisLine: {
+                    lineStyle: {
+                        color: '#9cb3c9'
+                    }
+                },
+                axisLabel: {
+                    fontSize: 12
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '亿美元',
+                nameTextStyle: {
+                    fontSize: 13,
+                    padding: [0, 0, 0, -40]
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#9cb3c9'
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed',
+                        color: '#e6eef7'
+                    }
+                },
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: [
+                {
+                    name: 'FDI总额',
+                    type: 'line',
+                    data: totalFDI,
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 8,
+                    lineStyle: {
+                        width: 4,
+                        color: '#1a3a6d'
+                    },
+                    itemStyle: {
+                        color: '#1a3a6d'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(26, 58, 109, 0.5)'
+                        }
+                    },
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ],
+                        label: {
+                            color: '#fff',
+                            backgroundColor: 'rgba(26, 58, 109, 0.7)',
+                            padding: [5, 10],
+                            borderRadius: 4
+                        }
+                    }
+                },
+                {
+                    name: '东盟外投资',
+                    type: 'bar',
+                    stack: 'FDI',
+                    barWidth: '60%',
+                    data: extraASEAN,
+                    itemStyle: {
+                        color: '#4a9d9c'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(74, 157, 156, 0.5)'
+                        }
+                    }
+                },
+                {
+                    name: '东盟内投资',
+                    type: 'bar',
+                    stack: 'FDI',
+                    barWidth: '60%',
+                    data: intraASEAN,
+                    itemStyle: {
+                        color: '#e8c547'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(232, 197, 71, 0.5)'
+                        }
+                    }
+                },
+                {
+                    name: '中国制造业FDI',
+                    type: 'line',
+                    data: chinaManufacturingFDI,
+                    smooth: true,
+                    symbol: 'diamond',
+                    symbolSize: 10,
+                    lineStyle: {
+                        width: 3,
+                        color: '#d9534f'
+                    },
+                    itemStyle: {
+                        color: '#d9534f'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(217, 83, 79, 0.5)'
+                        }
+                    },
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '峰值', value: 33.5, xAxis: '2022', yAxis: 33.5 }
+                        ],
+                        label: {
+                            color: '#fff',
+                            backgroundColor: 'rgba(217, 83, 79, 0.7)',
+                            padding: [5, 10],
+                            borderRadius: 4
+                        }
+                    }
+                }
+            ],
+            dataZoom: [{
+                type: 'inside',
+                start: 0,
+                end: 100
+            }, {
+                start: 0,
+                end: 100,
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.2)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }]
+        };
+        
+        // 应用配置项
+        myChart.setOption(option);
+        
+        // 响应式调整
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    </script>
+</body>
+</html>
